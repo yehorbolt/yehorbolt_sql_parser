@@ -21,20 +21,17 @@ Then, include the provided sql_grammar.pest file in your project. You can custom
 To parse SQL statements, use the parse_sql function provided in the code. It takes a SQL statement as a string and returns a ParsedStmnt enum variant.
 
 
-use sql_parser::parse_sql;
+```toml
+extern crate yehorbolt_sql_parser;
+use yehorbolt_sql_parser::parse_sql;
 
 fn main() {
-    let sql_statement = "CREATE TABLE users (id INT, name TEXT);";
-    match parse_sql(sql_statement) {
-        ParsedStmnt::CreateTable(create_table) => {
-            println!("Table Name: {}", create_table.table_name);
-            for column_def in create_table.column_defs {
-                println!("Column Name: {}, Type: {:?}", column_def.column_name, column_def.column_type);
-            }
-        }
-    }
+    let table = "CREATE TABLE financial_report { id INT, currency_name TEXT, is_usable BOOL}";
+    let res = parse_sql(table);
+    println!("Parsed: {:?}", res);
 }
 
+```
 
 In this example, the parse_sql function is used to parse a CREATE TABLE statement, and the parsed result is printed to the console.
 
