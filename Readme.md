@@ -21,7 +21,7 @@ Then, include the provided sql_grammar.pest file in your project. You can custom
 To parse SQL statements, use the parse_sql function provided in the code. It takes a SQL statement as a string and returns a ParsedStmnt enum variant.
 
 
-```toml
+```rust
 extern crate yehorbolt_sql_parser;
 use yehorbolt_sql_parser::parse_sql;
 
