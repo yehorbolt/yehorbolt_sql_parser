@@ -1,0 +1,33 @@
+
+WHITESPACE = _{ " " }
+
+
+open_brace = { "{" }
+close_brace = { "}" }
+open_paren = { "(" }
+close_paren = { ")" }
+comma = { "," }
+star = { "*" }
+quote = { "\"" }  
+
+int = { "INT" }
+text = { "TEXT" }
+bool = { "BOOL" }
+
+create = { ^"CREATE" }
+table = { ^"TABLE" }
+
+table_name = { (ASCII_ALPHANUMERIC | "_")+ }
+
+column_name = ${ (ASCII_ALPHANUMERIC | "_")+ }
+
+column_type = @{ ( int | text | bool ) }
+column_def = { column_name ~ column_type }
+
+table_fields = { (column_def ~ comma)* ~ (column_def)? }
+
+create_table = { create ~ table ~ table_name ~ (open_brace ~ table_fields ~ close_brace) }
+
+
+
+sql_grammar = {SOI ~ create_table ~ EOI }
