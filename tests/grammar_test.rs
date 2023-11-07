@@ -8,7 +8,7 @@ use yehorbolt_sql_parser::*;
 fn test_parse_create_table() -> anyhow::Result<()> {
     let test_create =
         "CREATE TABLE financial_report { id INT, currency_name TEXT, is_usable BOOL }";
-    let ParsedStmnt::CreateTable(res) = parse_sql(test_create);
+    let Parsed::CreateTable(res) = parse_sql(test_create);
 
     assert_eq!(res.table_name, "financial_report");
     assert_eq!(res.column_defs[0].column_name, "id");

@@ -1,6 +1,9 @@
 [package]
 name = "yehorbolt_sql_parser"
 version = "0.1.0"
+description = "A simple SQL parser written in Rust."
+repository = "https://github.com/yehorbolt/yehorbolt_sql_parser"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
