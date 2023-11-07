@@ -12,6 +12,8 @@ anyhow = "1.0.75"
 pest = "2.7.5"
 pest_derive = "2.7.5"
 thiserror = "1.0.50"
+```
+
 
 Then, include the provided sql_grammar.pest file in your project. You can customize this grammar file to support more SQL statements or modify the existing rules.
 
