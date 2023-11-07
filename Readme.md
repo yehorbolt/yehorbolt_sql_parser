@@ -38,7 +38,3 @@ In this example, the parse_sql function is used to parse a CREATE TABLE statemen
 ## Supported SQL Types
 The parser supports three SQL types: INT, TEXT, and BOOL. You can extend the SqlType enum in the code to add more supported types if needed.
 
-## Error Handling
-The parser does not handle errors related to invalid SQL syntax. You can enhance error handling by extending the code to handle specific error cases and provide meaningful error messages to the users.
-
-Feel free to customize and extend the parser to fit your specific use case or add more SQL features.
