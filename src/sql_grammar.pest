@@ -1,6 +1,9 @@
 
-WHITESPACE = _{ " " }
-
+/*
+    This lexical specification defines symbols and keywords for whitespace, braces, 
+    parentheses, commas, asterisks, and quotes, including keywords for integer, text, and boolean types.
+*/
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
 
 open_brace = { "{" }
 close_brace = { "}" }
@@ -14,10 +17,16 @@ int = { "INT" }
 text = { "TEXT" }
 bool = { "BOOL" }
 
+
+
+/*
+    This grammar defines a simple syntax for creating tables in a language. 
+    It includes rules for "CREATE TABLE" statements, specifying the table name, column names, and their data types.
+*/
 create = { ^"CREATE" }
 table = { ^"TABLE" }
 
-table_name = { (ASCII_ALPHANUMERIC | "_")+ }
+table_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
 
 column_name = ${ (ASCII_ALPHANUMERIC | "_")+ }
 
