@@ -1,14 +1,13 @@
 [package]
 name = "yehorbolt_sql_parser"
-version = "0.1.0"
+version = "0.1.1"
 
 authors = ["Yehor Bolotov <bolotov.yehor@gmail.com>"]
 description = "A simple SQL parser written in Rust."
 keywords = ["pest", "parser", "sql"]
 
 repository = "https://github.com/yehorbolt/yehorbolt_sql_parser"
-documentation = "https://docs.rs/yehorbolt_sql_parser/latest/yehorbolt_sql_parser/"
-license = "MIT"
+documentation = "https://docs.rs/yehorbolt_sql_parser/"
 readme = "README.md"
 
 
