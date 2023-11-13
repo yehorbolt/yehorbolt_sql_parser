@@ -18,7 +18,7 @@ thiserror = "1.0.50"
 Then, include the provided sql_grammar.pest file in your project. You can customize this grammar file to support more SQL statements or modify the existing rules.
 
 ## Usage
-To parse SQL statements, use the parse_sql function provided in the code. It takes a SQL statement as a string and returns a ParsedStmnt enum variant.
+To parse SQL statements, use the parse_sql function provided in the code. It takes a SQL statement as a string and returns a Parsed enum variant.
 
 
 ```rust
