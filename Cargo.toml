@@ -1,6 +1,6 @@
 [package]
 name = "yehorbolt_sql_parser"
-version = "0.1.4"
+version = "0.1.5"
 
 authors = ["Yehor Bolotov <bolotov.yehor@gmail.com>"]
 description = "A simple SQL parser written in Rust."

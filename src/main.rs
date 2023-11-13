@@ -6,9 +6,9 @@ fn main() {
     let table = "CREATE TABLE financial_report 
     { 
         id INT, 
-        currency_name TEXT, 
+        currency_name INT, 
         is_usable BOOL
     }";
     let res = parse_sql(table);
-    println!("Parsed: {:?}", res);
+    println!("Parse: {:?}", res);
 }

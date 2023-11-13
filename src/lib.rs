@@ -13,34 +13,29 @@
 //!    let res = parse_sql(table);
 //!    println!("Parsed: {:?}", res);
 //! ```
+//!
+//! In this example, the `parse_sql` function is used to parse the provided SQL `CREATE TABLE` statement,
+//! and the parsed result is printed using `println!` (with {:?}).
 
 use std::str::FromStr;
-
+extern crate thiserror;
 extern crate pest;
 #[macro_use]
 extern crate pest_derive;
-
 use pest::Parser;
+use thiserror::Error;
 
 #[derive(Parser)]
 #[grammar = "sql_grammar.pest"]
 pub struct SQLParser;
 
-#[derive(Debug)]
+#[derive(Debug, Error)]
+/// Using thiserror::Error for error handling
 pub enum SqlParseError {
-    InvalidSqlType,
+    /// Invalid data
+    #[error("Invalid data")]
+    InvalidData,
 }
-
-impl std::fmt::Display for SqlParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            SqlParseError::InvalidSqlType => write!(f, "Invalid SQL type"),
-        }
-    }
-}
-
-impl std::error::Error for SqlParseError {}
-
 
 
 #[derive(Debug)]
@@ -63,7 +58,7 @@ impl FromStr for SqlType {
             "INT" => Ok(SqlType::Int),
             "TEXT" => Ok(SqlType::Text),
             "BOOL" => Ok(SqlType::Bool),
-            _ => Err(SqlParseError::InvalidSqlType),
+            _ => Err(SqlParseError::InvalidData),
         }
     }
 }
@@ -81,33 +76,36 @@ impl PartialEq for SqlType {
 }
 
 
-
 /// Represents information about a database column.
 #[derive(Debug)]
 pub struct ColumnInfo {
+    /// Column name
     pub column_name: String,
+    /// Column type
     pub column_type: SqlType,
 }
 
 /// A variant of `ColumnInfo` with options for column name and column type.
 #[derive(Debug)]
-struct ColumnInfoOption {
-    column_name: Option<String>,
-    column_type: Option<SqlType>,
+pub struct ColumnInfoOption {
+    pub column_name: Option<String>,
+    pub column_type: Option<SqlType>,
 }
 
 /// Represents the structure of a SQL `CREATE TABLE` statement.
 #[derive(Debug)]
 pub struct CreateTable {
+    /// Table name
     pub table_name: String,
-    pub column_defs: Vec<ColumnInfo>,
+    /// Columns info
+    pub column_info: Vec<ColumnInfo>,
 }
 
 /// A variant of `CreateTable` with options for table name and column definitions.
 #[derive(Debug)]
-struct CreateTableOption {
-    table_name: Option<String>,
-    column_defs: Vec<Option<ColumnInfoOption>>,
+pub struct CreateTableOption {
+    pub table_name: Option<String>,
+    pub column_info: Vec<Option<ColumnInfoOption>>,
 }
 
 /// Represents parsed SQL statements.
@@ -117,10 +115,9 @@ pub enum Parsed {
 }
 
 
-/// This function, unwrap_column_defs, recursively unwraps and extracts column information from a vector
-/// of optional ColumnInfoOption instances, returning a vector of ColumnInfo. If the input vector is empty, it
-/// returns an empty vector.
-fn unwrap_column_defs(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
+/// This function, unwrap_column_info, recursively unwraps and extracts column information from a vector
+/// of optional ColumnInfoOption instances, returning a vector of ColumnInfo. 
+fn unwrap_column_info(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
     if column_info.is_empty() {
         return Vec::<ColumnInfo>::new();
     }
@@ -131,18 +128,17 @@ fn unwrap_column_defs(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<Co
         column_type: cdef.column_type.unwrap(),
     };
 
-    let mut result = unwrap_column_defs(column_info);
+    let mut result = unwrap_column_info(column_info);
     result.push(cd);
     result
 }
 
 /// This function parses a create table statement, extracting the table name, column names, and types to construct a
-/// CreateTable struct. It uses a CreateTableOption for temporary storage and iterates through parsed pairs to populate the struct.
-/// The result is a CreateTable with the table name and column definitions.
+/// CreateTable struct.
 fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTable {
     let mut table_names = CreateTableOption {
         table_name: None,
-        column_defs: Vec::new(),
+        column_info: Vec::new(),
     };
 
     let mut column_name: Option<String> = None;
@@ -158,7 +154,7 @@ fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTabl
             }
             Rule::column_type => {
                 // ordering ensures column_name is set
-                table_names.column_defs.push(Some(ColumnInfoOption {
+                table_names.column_info.push(Some(ColumnInfoOption {
                     column_name: column_name.clone(),
                     column_type: Some(SqlType::from_str(child.as_str()).unwrap()),
                 }));
@@ -166,31 +162,29 @@ fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTabl
             _ => (),
         }
     }
-    let column_defs = unwrap_column_defs(&mut table_names.column_defs);
+    let column_info = unwrap_column_info(&mut table_names.column_info);
 
     CreateTable {
         table_name: table_names.table_name.unwrap(),
-        column_defs,
+        column_info,
     }
 }
 
 
-/// This function takes a SQL query as input and returns a parsed result. It uses an SQL parser (SQLParser)
-/// with a specified grammar rule (Rule::sql_grammar) to parse the query. The function then iterates through the parsed result, specifically
-/// looking for create_table instances using the parse_create_table function. The parsed result is stored in the Parsed::CreateTable variant,
-/// and the final result is returned.
-pub fn parse_sql(query: &str) -> Parsed {
+/// This function takes a SQL query as input and returns a parsed result. 
+pub fn parse_sql(query: &str) -> Result<Parsed, SqlParseError> {
     let parsed = SQLParser::parse(Rule::sql_grammar, query)
-        .expect("Parsing error")
+        .map_err(|_e| {
+            SqlParseError::InvalidData
+        })?
         .next()
-        .unwrap();
-
-    let mut result: Option<Parsed> = None;
+        .ok_or(SqlParseError::InvalidData)?;
 
     let pairs = parsed.into_inner();
     for _child in pairs.clone().flatten() {
         let create_table = parse_create_table(pairs.clone().flatten());
-        result = Some(Parsed::CreateTable(create_table))
+        return Ok(Parsed::CreateTable(create_table));
     }
-    result.unwrap()
+
+    Err(SqlParseError::InvalidData)
 }
