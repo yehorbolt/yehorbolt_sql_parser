@@ -9,7 +9,7 @@ keywords = ["pest", "parser", "sql"]
 repository = "https://github.com/yehorbolt/yehorbolt_sql_parser"
 documentation = "https://docs.rs/yehorbolt_sql_parser/"
 readme = "README.md"
-
+license = "MIT"
 
 
 [dependencies]
