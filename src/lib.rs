@@ -14,11 +14,6 @@
 ///!    println!("Parsed: {:?}", res);
 ///! ```
 
-
-/*
-   This Rust code includes the necessary imports and defines a SQLParser struct using the Pest parser generator.
-   The parser is generated based on the grammar specified in the file "sql_grammar.pest."
-*/
 use std::str::FromStr;
 
 extern crate pest;
@@ -46,11 +41,10 @@ impl std::fmt::Display for SqlParseError {
 
 impl std::error::Error for SqlParseError {}
 
-/*
-   This code defines an enumeration SqlType representing SQL data types (Int, Text, Bool).
-   It implements the FromStr trait for parsing strings into SqlType variants, handling errors with
-   a custom error type SqlParseError. Additionally, it implements PartialEq for comparing SqlType instances.
-*/
+
+/// This code defines an enumeration SqlType representing SQL data types (Int, Text, Bool).
+/// It implements the FromStr trait for parsing strings into SqlType variants, handling errors with
+/// a custom error type SqlParseError. Additionally, it implements PartialEq for comparing SqlType instances.
 #[derive(Debug)]
 pub enum SqlType {
     Int,
@@ -82,10 +76,9 @@ impl PartialEq for SqlType {
     }
 }
 
-/*
-   This code defines structures for handling SQL column information (ColumnInfo),
-   creating tables (CreateTable), and represents parsed SQL statements (Parsed).
-*/
+
+/// This code defines structures for handling SQL column information (ColumnInfo),
+/// creating tables (CreateTable), and represents parsed SQL statements (Parsed).
 #[derive(Debug)]
 pub struct ColumnInfo {
     pub column_name: String,
@@ -115,11 +108,10 @@ pub enum Parsed {
     CreateTable(CreateTable),
 }
 
-/*
-    This function, unwrap_column_defs, recursively unwraps and extracts column information from a vector
-    of optional ColumnInfoOption instances, returning a vector of ColumnInfo. If the input vector is empty, it
-    returns an empty vector.
-*/
+
+/// This function, unwrap_column_defs, recursively unwraps and extracts column information from a vector
+/// of optional ColumnInfoOption instances, returning a vector of ColumnInfo. If the input vector is empty, it
+/// returns an empty vector.
 fn unwrap_column_defs(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
     if column_info.is_empty() {
         return Vec::<ColumnInfo>::new();
@@ -136,11 +128,9 @@ fn unwrap_column_defs(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<Co
     result
 }
 
-/*
-   This function parses a create table statement, extracting the table name, column names, and types to construct a
-   CreateTable struct. It uses a CreateTableOption for temporary storage and iterates through parsed pairs to populate the struct.
-   The result is a CreateTable with the table name and column definitions.
-*/
+/// This function parses a create table statement, extracting the table name, column names, and types to construct a
+/// CreateTable struct. It uses a CreateTableOption for temporary storage and iterates through parsed pairs to populate the struct.
+/// The result is a CreateTable with the table name and column definitions.
 fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTable {
     let mut table_names = CreateTableOption {
         table_name: None,
@@ -176,12 +166,11 @@ fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTabl
     }
 }
 
-/*
-   This function takes a SQL query as input and returns a parsed result. It uses an SQL parser (SQLParser)
-   with a specified grammar rule (Rule::sql_grammar) to parse the query. The function then iterates through the parsed result, specifically
-   looking for create_table instances using the parse_create_table function. The parsed result is stored in the Parsed::CreateTable variant,
-   and the final result is returned.
-*/
+
+/// This function takes a SQL query as input and returns a parsed result. It uses an SQL parser (SQLParser)
+/// with a specified grammar rule (Rule::sql_grammar) to parse the query. The function then iterates through the parsed result, specifically
+/// looking for create_table instances using the parse_create_table function. The parsed result is stored in the Parsed::CreateTable variant,
+/// and the final result is returned.
 pub fn parse_sql(query: &str) -> Parsed {
     let parsed = SQLParser::parse(Rule::sql_grammar, query)
         .expect("Parsing error")
