@@ -57,3 +57,9 @@ fn test_parse_column_type_error() {
     let invalid_column_type = "CREATE TABLE financial_report { id ABOBA }";
     assert!(matches!(parse_sql(invalid_column_type), Err(SqlParseError::InvalidData)));
 }
+
+#[test]
+fn test_parse_punctuation_error() {
+    let invalid_punctuation = "CREATE TABLE financial_report , { id INT }";
+    assert!(matches!(parse_sql(invalid_punctuation), Err(SqlParseError::InvalidData)));
+}

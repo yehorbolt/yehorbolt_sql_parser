@@ -27,6 +27,7 @@ use thiserror::Error;
 
 #[derive(Parser)]
 #[grammar = "sql_grammar.pest"]
+/// SQL parser struct
 pub struct SQLParser;
 
 #[derive(Debug, Error)]
@@ -117,7 +118,7 @@ pub enum Parsed {
 
 /// This function, unwrap_column_info, recursively unwraps and extracts column information from a vector
 /// of optional ColumnInfoOption instances, returning a vector of ColumnInfo. 
-fn unwrap_column_info(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
+pub fn unwrap_column_info(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
     if column_info.is_empty() {
         return Vec::<ColumnInfo>::new();
     }
@@ -135,7 +136,7 @@ fn unwrap_column_info(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<Co
 
 /// This function parses a create table statement, extracting the table name, column names, and types to construct a
 /// CreateTable struct.
-fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTable {
+pub fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> CreateTable {
     let mut table_names = CreateTableOption {
         table_name: None,
         column_info: Vec::new(),
