@@ -1,18 +1,18 @@
-///! # SQL parser
-///! This is a simple SQL parser written in Rust using the pest library. 
-///! The parser supports parsing CREATE TABLE statements with column definitions.
-///!
-///! # Example
-///! ``` rust
-///!    let table = "CREATE TABLE financial_report 
-///!    { 
-///!        id INT, 
-///!        currency_name TEXT, 
-///!        is_usable BOOL
-///!    }";
-///!    let res = parse_sql(table);
-///!    println!("Parsed: {:?}", res);
-///! ```
+//! # SQL parser
+//! This is a simple SQL parser written in Rust using the pest library. 
+//! The parser supports parsing CREATE TABLE statements with column definitions.
+//!
+//! # Example
+//! ``` rust
+//!    let table = "CREATE TABLE financial_report 
+//!    { 
+//!        id INT, 
+//!        currency_name TEXT, 
+//!        is_usable BOOL
+//!    }";
+//!    let res = parse_sql(table);
+//!    println!("Parsed: {:?}", res);
+//! ```
 
 use std::str::FromStr;
 
@@ -42,16 +42,19 @@ impl std::fmt::Display for SqlParseError {
 impl std::error::Error for SqlParseError {}
 
 
-/// This code defines an enumeration SqlType representing SQL data types (Int, Text, Bool).
-/// It implements the FromStr trait for parsing strings into SqlType variants, handling errors with
-/// a custom error type SqlParseError. Additionally, it implements PartialEq for comparing SqlType instances.
+
 #[derive(Debug)]
+/// SQL data types.
 pub enum SqlType {
+    /// Integer type 
     Int,
+    /// Text type 
     Text,
+    /// Boolean type 
     Bool,
 }
 
+/// FromStr implementation for SqlType
 impl FromStr for SqlType {
     type Err = SqlParseError;
 
@@ -65,6 +68,7 @@ impl FromStr for SqlType {
     }
 }
 
+/// Implemented PartialEq for SqlType
 impl PartialEq for SqlType {
     fn eq(&self, other: &SqlType) -> bool {
         match (&self, other) {
@@ -77,32 +81,36 @@ impl PartialEq for SqlType {
 }
 
 
-/// This code defines structures for handling SQL column information (ColumnInfo),
-/// creating tables (CreateTable), and represents parsed SQL statements (Parsed).
+
+/// Represents information about a database column.
 #[derive(Debug)]
 pub struct ColumnInfo {
     pub column_name: String,
     pub column_type: SqlType,
 }
 
+/// A variant of `ColumnInfo` with options for column name and column type.
 #[derive(Debug)]
 struct ColumnInfoOption {
     column_name: Option<String>,
     column_type: Option<SqlType>,
 }
 
+/// Represents the structure of a SQL `CREATE TABLE` statement.
 #[derive(Debug)]
 pub struct CreateTable {
     pub table_name: String,
     pub column_defs: Vec<ColumnInfo>,
 }
 
+/// A variant of `CreateTable` with options for table name and column definitions.
 #[derive(Debug)]
 struct CreateTableOption {
     table_name: Option<String>,
     column_defs: Vec<Option<ColumnInfoOption>>,
 }
 
+/// Represents parsed SQL statements.
 #[derive(Debug)]
 pub enum Parsed {
     CreateTable(CreateTable),
