@@ -11,7 +11,7 @@ comma = { "," }
 quote = { "\"" }  
 
 int = { "INT" }
-text = { "TEXT" }c:\Users\Yehor\Downloads\Диаграмма без названия.drawio.svg
+text = { "TEXT" }
 bool = { "BOOL" }
 
 

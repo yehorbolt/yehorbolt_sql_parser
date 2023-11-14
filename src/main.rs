@@ -9,7 +9,7 @@ use yehorbolt_sql_parser::parse_sql;
 #[derive(Parser)]
 #[command(name = "Cli for SQL parser")]
 #[command(author = "Bolotov Y. <bolotov.yehor@gmail.com>")]
-#[command(version = "0.1.10")]
+#[command(version = "0.1.11")]
 #[command(about = "A simple SQL parser written in Rust", long_about = None)]
 struct Cli {
     #[arg(short = 'p', long)]
