@@ -1,6 +1,6 @@
 [package]
 name = "yehorbolt_sql_parser"
-version = "0.1.8"
+version = "0.1.9"
 
 authors = ["Yehor Bolotov <bolotov.yehor@gmail.com>"]
 description = "This is a simple SQL parser written in Rust using the pest library. The parser supports parsing CREATE TABLE statements with column definitions."

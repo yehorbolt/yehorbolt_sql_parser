@@ -2,8 +2,9 @@
 
 This is a simple SQL parser written in Rust using the `pest` library. The parser supports parsing `CREATE TABLE` statements with column definitions.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Crates.io](https://img.shields.io/crates/v/yehorbolt_sql_parser)](https://crates.io/crates/yehorbolt_sql_parser)
-[![Documentation](https://docs.rs/yehorbolt_sql_parser/badge.svg)](https://docs.rs/yehorbolt_sql_parser/0.1.6/yehorbolt_sql_parser/)
+[![Documentation](https://docs.rs/yehorbolt_sql_parser/badge.svg)](https://docs.rs/yehorbolt_sql_parser/0.1.9/yehorbolt_sql_parser/)
 
 ## Installation
 
