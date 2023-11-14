@@ -45,20 +45,20 @@ In this example, the parse_sql function is used to parse a CREATE TABLE statemen
 ## SQL data types
 The parser supports the following SQL data types:
 
-INT: Integer type
-TEXT: Text type
+INT: Integer type\
+TEXT: Text type\
 BOOL: Boolean type
 
 ## Usage
 Include the sql_parser crate in your Rust project and use the provided functions to parse SQL `CREATE TABLE` statements. Refer to the example for usage details.
 
 ## CLI usage
--p, --parse <PARSE>: Parse SQL CREATE TABLE statement from the specified file.
--h, --help : Prints help.
+-p, --parse <PARSE>: Parse SQL CREATE TABLE statement from the specified file.\
+-h, --help : Prints help.\
 -V, --version : Prints version.
 
 ## CLI example
-cargo run -- -p ./examples/txtfile.txt
+cargo run -- -p ./examples/txtfile.txt\
 cargo run -- -p ./examples/sqlfile.sql
 
 (Examples included)
