@@ -43,6 +43,9 @@ fn main() {
 
 In this example, the parse_sql function is used to parse a CREATE TABLE statement, and the parsed result is printed to the console.
 
+## Grammar diagram
+![Diagram Example](./doc/diagram.svg)
+
 ## SQL data types
 The parser supports the following SQL data types:
 

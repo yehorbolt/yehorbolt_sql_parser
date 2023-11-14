@@ -7,14 +7,11 @@ WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
 
 open_brace = { "{" }
 close_brace = { "}" }
-open_paren = { "(" }
-close_paren = { ")" }
 comma = { "," }
-star = { "*" }
 quote = { "\"" }  
 
 int = { "INT" }
-text = { "TEXT" }
+text = { "TEXT" }c:\Users\Yehor\Downloads\Диаграмма без названия.drawio.svg
 bool = { "BOOL" }
 
 
@@ -29,8 +26,8 @@ table = { ^"TABLE" }
 table_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
 
 column_name = ${ (ASCII_ALPHANUMERIC | "_")+ }
-
 column_type = @{ ( int | text | bool ) }
+
 column_def = { column_name ~ column_type }
 
 table_fields = { (column_def ~ comma)* ~ (column_def)? }
