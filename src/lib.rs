@@ -1,25 +1,30 @@
 //! # SQL parser
-//! This is a simple SQL parser written in Rust using the pest library. 
+//! This is a simple SQL parser written in Rust using the pest library.
 //! The parser supports parsing CREATE TABLE statements with column definitions.
 //!
 //! # Example
-//! ``` rust
-//!    let table = "CREATE TABLE financial_report 
-//!    { 
-//!        id INT, 
-//!        currency_name TEXT, 
+//! ```
+//! extern crate yehorbolt_sql_parser;
+//! use yehorbolt_sql_parser::parse_sql;
+//!
+//! fn main() {
+//!    let table = "CREATE TABLE financial_report
+//!    {
+//!        id INT,
+//!        currency_name TEXT,
 //!        is_usable BOOL
 //!    }";
 //!    let res = parse_sql(table);
-//!    println!("Parsed: {:?}", res);
+//!    println!("Parsed: {:#?}", res);
+//! }
 //! ```
 //!
 //! In this example, the `parse_sql` function is used to parse the provided SQL `CREATE TABLE` statement,
 //! and the parsed result is printed using `println!` (with {:?}).
 
 use std::str::FromStr;
-extern crate thiserror;
 extern crate pest;
+extern crate thiserror;
 #[macro_use]
 extern crate pest_derive;
 use pest::Parser;
@@ -38,15 +43,14 @@ pub enum SqlParseError {
     InvalidData,
 }
 
-
 #[derive(Debug)]
 /// SQL data types.
 pub enum SqlType {
-    /// Integer type 
+    /// Integer type
     Int,
-    /// Text type 
+    /// Text type
     Text,
-    /// Boolean type 
+    /// Boolean type
     Bool,
 }
 
@@ -75,7 +79,6 @@ impl PartialEq for SqlType {
         }
     }
 }
-
 
 /// Represents information about a database column.
 #[derive(Debug)]
@@ -115,9 +118,8 @@ pub enum Parsed {
     CreateTable(CreateTable),
 }
 
-
 /// This function, unwrap_column_info, recursively unwraps and extracts column information from a vector
-/// of optional ColumnInfoOption instances, returning a vector of ColumnInfo. 
+/// of optional ColumnInfoOption instances, returning a vector of ColumnInfo.
 pub fn unwrap_column_info(column_info: &mut Vec<Option<ColumnInfoOption>>) -> Vec<ColumnInfo> {
     if column_info.is_empty() {
         return Vec::<ColumnInfo>::new();
@@ -171,18 +173,15 @@ pub fn parse_create_table(pairs: pest::iterators::FlatPairs<'_, Rule>) -> Create
     }
 }
 
-
-/// This function takes a SQL query as input and returns a parsed result. 
+/// This function takes a SQL query as input and returns a parsed result.
 pub fn parse_sql(query: &str) -> Result<Parsed, SqlParseError> {
     let parsed = SQLParser::parse(Rule::sql_grammar, query)
-        .map_err(|_e| {
-            SqlParseError::InvalidData
-        })?
+        .map_err(|_e| SqlParseError::InvalidData)?
         .next()
         .ok_or(SqlParseError::InvalidData)?;
 
     let pairs = parsed.into_inner();
-    for _child in pairs.clone().flatten() {
+    if let Some(_child) = pairs.clone().flatten().next() {
         let create_table = parse_create_table(pairs.clone().flatten());
         return Ok(Parsed::CreateTable(create_table));
     }

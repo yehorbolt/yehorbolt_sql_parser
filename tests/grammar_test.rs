@@ -6,8 +6,7 @@ use yehorbolt_sql_parser::*;
 
 #[test]
 fn test_parse_create_table() -> anyhow::Result<()> {
-    let test_create =
-        "CREATE TABLE financial_report { 
+    let test_create = "CREATE TABLE financial_report { 
             id INT, 
             currency_name TEXT, 
             is_usable BOOL 
@@ -32,7 +31,10 @@ fn test_parse_syntax_error() {
         currency_name TEXT, 
         is_usable BOOL 
     }";
-    assert!(matches!(parse_sql(invalid_table), Err(SqlParseError::InvalidData)));
+    assert!(matches!(
+        parse_sql(invalid_table),
+        Err(SqlParseError::InvalidData)
+    ));
 }
 
 #[test]
@@ -42,24 +44,35 @@ fn test_parse_create_table_name_error() {
         currency_name TEXT, 
         is_usable BOOL 
     }";
-    assert!(matches!(parse_sql(invalid_table_name), Err(SqlParseError::InvalidData)));
+    assert!(matches!(
+        parse_sql(invalid_table_name),
+        Err(SqlParseError::InvalidData)
+    ));
 }
 
 #[test]
 fn test_parse_column_name_error() {
     let invalid_column_name = "CREATE TABLE financial_report { id ABOBA INT }";
-    assert!(matches!(parse_sql(invalid_column_name), Err(SqlParseError::InvalidData)));
+    assert!(matches!(
+        parse_sql(invalid_column_name),
+        Err(SqlParseError::InvalidData)
+    ));
 }
-
 
 #[test]
 fn test_parse_column_type_error() {
     let invalid_column_type = "CREATE TABLE financial_report { id ABOBA }";
-    assert!(matches!(parse_sql(invalid_column_type), Err(SqlParseError::InvalidData)));
+    assert!(matches!(
+        parse_sql(invalid_column_type),
+        Err(SqlParseError::InvalidData)
+    ));
 }
 
 #[test]
 fn test_parse_punctuation_error() {
     let invalid_punctuation = "CREATE TABLE financial_report , { id INT }";
-    assert!(matches!(parse_sql(invalid_punctuation), Err(SqlParseError::InvalidData)));
+    assert!(matches!(
+        parse_sql(invalid_punctuation),
+        Err(SqlParseError::InvalidData)
+    ));
 }
